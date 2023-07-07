@@ -1,0 +1,1206 @@
+4,,"How to convert Decimal to Double in C#?","<p>I want to assign the decimal variable &quot;trans&quot; to the double variable &quot;this.Opacity&quot;.</p>
+<pre class=""lang-cs prettyprint-override""><code>decimal trans = trackBar1.Value / 5000;
+this.Opacity = trans;
+</code></pre>
+<p>When I build the app it gives the following error:</p>
+<blockquote>
+<p>Cannot implicitly convert type decimal to double</p>
+</blockquote>
+"
+6,,"Why did the width collapse in the percentage width child element in an absolutely positioned parent on Internet Explorer 7?","<p>I have an absolutely positioned <code>div</code> containing several children, one of which is a relatively positioned <code>div</code>. When I use a <code>percentage-based width</code> on the child <code>div</code>, it collapses to <code>0 width</code> on IE7, but not on Firefox or Safari.</p>
+<p>If I use <code>pixel width</code>, it works. If the parent is relatively positioned, the percentage width on the child works.</p>
+<ol>
+<li>Is there something I'm missing here?</li>
+<li>Is there an easy fix for this besides the <code>pixel-based width</code> on the child?</li>
+<li>Is there an area of the CSS specification that covers this?</li>
+</ol>
+"
+7,4,,"<p>An explicit cast to <code>double</code> like this isn't necessary:</p>
+
+<pre><code>double trans = (double) trackBar1.Value / 5000.0;
+</code></pre>
+
+<p>Identifying the constant as <code>5000.0</code> (or as <code>5000d</code>) is sufficient:</p>
+
+<pre><code>double trans = trackBar1.Value / 5000.0;
+double trans = trackBar1.Value / 5000d;
+</code></pre>
+"
+9,,"How do I calculate someone's age based on a DateTime type birthday?","<p>Given a <code>DateTime</code> representing a person's birthday, how do I calculate their age in years?</p>
+"
+11,,"Calculate relative time in C#","<p>Given a specific <code>DateTime</code> value, how do I display relative time, like:</p>
+<ul>
+<li><code>2 hours ago</code></li>
+<li><code>3 days ago</code></li>
+<li><code>a month ago</code></li>
+</ul>
+"
+12,11,,"<p>Here's how I do it</p>
+
+<pre class=""lang-csharp prettyprint-override""><code>var ts = new TimeSpan(DateTime.UtcNow.Ticks - dt.Ticks);
+double delta = Math.Abs(ts.TotalSeconds);
+
+if (delta &lt; 60)
+{
+  return ts.Seconds == 1 ? ""one second ago"" : ts.Seconds + "" seconds ago"";
+}
+if (delta &lt; 60 * 2)
+{
+  return ""a minute ago"";
+}
+if (delta &lt; 45 * 60)
+{
+  return ts.Minutes + "" minutes ago"";
+}
+if (delta &lt; 90 * 60)
+{
+  return ""an hour ago"";
+}
+if (delta &lt; 24 * 60 * 60)
+{
+  return ts.Hours + "" hours ago"";
+}
+if (delta &lt; 48 * 60 * 60)
+{
+  return ""yesterday"";
+}
+if (delta &lt; 30 * 24 * 60 * 60)
+{
+  return ts.Days + "" days ago"";
+}
+if (delta &lt; 12 * 30 * 24 * 60 * 60)
+{
+  int months = Convert.ToInt32(Math.Floor((double)ts.Days / 30));
+  return months &lt;= 1 ? ""one month ago"" : months + "" months ago"";
+}
+int years = Convert.ToInt32(Math.Floor((double)ts.Days / 365));
+return years &lt;= 1 ? ""one year ago"" : years + "" years ago"";
+</code></pre>
+
+<p>Suggestions? Comments? Ways to improve this algorithm?</p>
+"
+13,,"Determine a user's timezone","<p>Is there a standard way for a web server to be able to determine a user's timezone within a web page? </p>
+
+<p>Perhaps from an HTTP header or part of the <code>user-agent</code> string?</p>
+"
+14,,"Difference between Math.Floor() and Math.Truncate()","<p>What is the difference between <a href=""http://msdn.microsoft.com/en-us/library/9a6a2sxy.aspx"" rel=""noreferrer""><code>Math.Floor()</code></a> and <a href=""http://msdn.microsoft.com/en-us/library/system.math.truncate.aspx"" rel=""noreferrer""><code>Math.Truncate()</code></a> in .NET?</p>
+"
+16,,"Filling a DataSet or a DataTable from a LINQ query result set","<p>How do you expose a LINQ query as an ASMX web service?
+<br>
+Usually, from the business tier, I can return a typed <code>DataSet</code> or a <code>DataTable</code> which can be serialized for transport over ASMX.</p>
+<p>How can I do the same for a LINQ query? <br>
+Is there a way to populate a typed <code>DataSet</code> or a <code>DataTable</code> via a LINQ query?</p>
+<pre><code>public static MyDataTable CallMySproc()
+{
+    string conn = &quot;...&quot;;
+
+    MyDatabaseDataContext db = new MyDatabaseDataContext(conn);
+    MyDataTable dt = new MyDataTable();
+
+    // execute a sproc via LINQ
+    var query = from dr
+                in db.MySproc().AsEnumerable
+                select dr;
+
+    // copy LINQ query resultset into a DataTable -this does not work !    
+    dt = query.CopyToDataTable();
+   
+    return dt;
+}
+</code></pre>
+<p>How could I put the result set of a LINQ query into a <code>DataSet</code> or a <code>DataTable</code>?
+<br>
+Alternatively, can the LINQ query be serializable so that I can expose it as an ASMX web service?</p>
+"
+17,,"Binary Data in MySQL","<p>How do I store binary data in <a href=""http://en.wikipedia.org/wiki/MySQL"" rel=""noreferrer"">MySQL</a>?</p>
+"
+18,17,,"<p>For a table like this:</p>
+
+<pre><code>CREATE TABLE binary_data (
+    id INT(4) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    description CHAR(50),
+    bin_data LONGBLOB,
+    filename CHAR(50),
+    filesize CHAR(50),
+    filetype CHAR(50)
+);
+</code></pre>
+
+<p>Here is a PHP example:</p>
+
+<pre><code>&lt;?php
+    // store.php3 - by Florian Dittmer &lt;dittmer@gmx.net&gt;
+    // Example php script to demonstrate the storing of binary files into
+    // an sql database. More information can be found at http://www.phpbuilder.com/
+?&gt;
+
+&lt;html&gt;
+    &lt;head&gt;&lt;title&gt;Store binary data into SQL Database&lt;/title&gt;&lt;/head&gt;
+
+    &lt;body&gt;
+        &lt;?php
+            // Code that will be executed if the form has been submitted:
+
+            if ($submit) {
+                // Connect to the database (you may have to adjust
+                // the hostname, username or password).
+
+                mysql_connect(""localhost"", ""root"", ""password"");
+                mysql_select_db(""binary_data"");
+
+                $data = mysql_real_escape_string(fread(fopen($form_data, ""r""), filesize($form_data)));
+
+                $result = mysql_query(""INSERT INTO binary_data (description, bin_data, filename, filesize, filetype) "".
+                                    ""VALUES ('$form_description', '$data', '$form_data_name', '$form_data_size', '$form_data_type')"");
+
+                $id= mysql_insert_id();
+                print ""&lt;p&gt;This file has the following Database ID: &lt;b&gt;$id&lt;/b&gt;"";
+
+                mysql_close();
+            } else {
+
+                // else show the form to submit new data:
+        ?&gt;
+        &lt;form method=""post"" action=""&lt;?php echo $PHP_SELF; ?&gt;"" enctype=""multipart/form-data""&gt;
+            File Description:&lt;br&gt;
+            &lt;input type=""text"" name=""form_description""  size=""40""&gt;
+            &lt;input type=""hidden"" name=""MAX_FILE_SIZE"" value=""1000000""&gt;
+            &lt;br&gt;File to upload/store in database:&lt;br&gt;
+            &lt;input type=""file"" name=""form_data""  size=""40""&gt;
+            &lt;p&gt;&lt;input type=""submit"" name=""submit"" value=""submit""&gt;
+        &lt;/form&gt;
+
+        &lt;?php
+            }
+        ?&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+"
+19,,"What is the fastest way to get the value of π?","<p>I'm looking for the fastest way to obtain the value of π, as a personal challenge. More specifically, I'm using ways that don't involve using <code>#define</code> constants like <code>M_PI</code>, or hard-coding the number in.</p>
+
+<p>The program below tests the various ways I know of. The inline assembly version is, in theory, the fastest option, though clearly not portable. I've included it as a baseline to compare against the other versions. In my tests, with built-ins, the <code>4 * atan(1)</code> version is fastest on GCC 4.2, because it auto-folds the <code>atan(1)</code> into a constant. With <code>-fno-builtin</code> specified, the <code>atan2(0, -1)</code> version is fastest.</p>
+
+<p>Here's the main testing program (<code>pitimes.c</code>):</p>
+
+<pre class=""lang-c prettyprint-override""><code>#include &lt;math.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;time.h&gt;
+
+#define ITERS 10000000
+#define TESTWITH(x) {                                                       \
+    diff = 0.0;                                                             \
+    time1 = clock();                                                        \
+    for (i = 0; i &lt; ITERS; ++i)                                             \
+        diff += (x) - M_PI;                                                 \
+    time2 = clock();                                                        \
+    printf(""%s\t=&gt; %e, time =&gt; %f\n"", #x, diff, diffclock(time2, time1));   \
+}
+
+static inline double
+diffclock(clock_t time1, clock_t time0)
+{
+    return (double) (time1 - time0) / CLOCKS_PER_SEC;
+}
+
+int
+main()
+{
+    int i;
+    clock_t time1, time2;
+    double diff;
+
+    /* Warmup. The atan2 case catches GCC's atan folding (which would
+     * optimise the ``4 * atan(1) - M_PI'' to a no-op), if -fno-builtin
+     * is not used. */
+    TESTWITH(4 * atan(1))
+    TESTWITH(4 * atan2(1, 1))
+
+#if defined(__GNUC__) &amp;&amp; (defined(__i386__) || defined(__amd64__))
+    extern double fldpi();
+    TESTWITH(fldpi())
+#endif
+
+    /* Actual tests start here. */
+    TESTWITH(atan2(0, -1))
+    TESTWITH(acos(-1))
+    TESTWITH(2 * asin(1))
+    TESTWITH(4 * atan2(1, 1))
+    TESTWITH(4 * atan(1))
+
+    return 0;
+}
+</code></pre>
+
+<p>And the inline assembly stuff (<code>fldpi.c</code>) that will only work for x86 and x64 systems:</p>
+
+<pre class=""lang-c prettyprint-override""><code>double
+fldpi()
+{
+    double pi;
+    asm(""fldpi"" : ""=t"" (pi));
+    return pi;
+}
+</code></pre>
+
+<p>And a build script that builds all the configurations I'm testing (<code>build.sh</code>):</p>
+
+<pre><code>#!/bin/sh
+gcc -O3 -Wall -c           -m32 -o fldpi-32.o fldpi.c
+gcc -O3 -Wall -c           -m64 -o fldpi-64.o fldpi.c
+
+gcc -O3 -Wall -ffast-math  -m32 -o pitimes1-32 pitimes.c fldpi-32.o
+gcc -O3 -Wall              -m32 -o pitimes2-32 pitimes.c fldpi-32.o -lm
+gcc -O3 -Wall -fno-builtin -m32 -o pitimes3-32 pitimes.c fldpi-32.o -lm
+gcc -O3 -Wall -ffast-math  -m64 -o pitimes1-64 pitimes.c fldpi-64.o -lm
+gcc -O3 -Wall              -m64 -o pitimes2-64 pitimes.c fldpi-64.o -lm
+gcc -O3 -Wall -fno-builtin -m64 -o pitimes3-64 pitimes.c fldpi-64.o -lm
+</code></pre>
+
+<p>Apart from testing between various compiler flags (I've compared 32-bit against 64-bit too because the optimizations are different), I've also tried switching the order of the tests around. But still, the <code>atan2(0, -1)</code> version still comes out on top every time.</p>
+"
+22,9,,"<p>The best way that I know of because of leap years and everything is:</p>
+
+<pre class=""lang-cs prettyprint-override""><code>DateTime birthDate = new DateTime(2000,3,1);
+int age = (int)Math.Floor((DateTime.Now - birthDate).TotalDays / 365.25D);
+</code></pre>
+"
+24,,"Throw an error preventing a table update in a MySQL trigger","<p>If I have a trigger before the update on a table, how can I throw an error that prevents the update on that table?</p>
+"
+25,,"How to use the C socket API in C++ on z/OS","<p>I'm having issues getting the C sockets API to work properly in C++ on z/OS.</p>
+<p>Although I am including <code>sys/socket.h</code>, I still get compile time errors telling me that <code>AF_INET</code> is not defined.</p>
+<p>Am I missing something obvious, or is this related to the fact that being on z/OS makes my problems much more complicated?</p>
+<p>I discovered that there is a <code>#ifdef</code> that I'm hitting. Apparently, z/OS isn't happy unless I define which &quot;type&quot; of sockets I'm using with:</p>
+<pre><code>#define _OE_SOCKETS
+</code></pre>
+<p>Now, I personally have no idea what this <code>_OE_SOCKETS</code> is actually for, so if any z/OS sockets programmers are out there (all 3 of you), perhaps you could give me a rundown of how this all works?</p>
+<p>Test App:</p>
+<pre><code>#include &lt;sys/socket.h&gt;
+
+int main()
+{
+    return AF_INET;
+}
+</code></pre>
+<p>Compile/Link Output:</p>
+<pre class=""lang-none prettyprint-override""><code>cxx -Wc,xplink -Wl,xplink -o inet_test inet.C
+
+&quot;./inet.C&quot;, line 5.16: CCN5274 (S) The name lookup for &quot;AF_INET&quot; did not find a declaration.
+CCN0797(I) Compilation failed for file ./inet.C. Object file not created.
+</code></pre>
+<p>A check of sys/sockets.h does include the definition I need, and as far as I can tell, it is not being blocked by any <code>#ifdef</code> statements.</p>
+<p>I have however noticed it contains the following:</p>
+<pre><code>#ifdef __cplusplus
+  extern &quot;C&quot; {
+#endif
+</code></pre>
+<p>which encapsulates basically the whole file? Not sure if it matters.</p>
+"
+26,17,,"<p>The answer by phpguy is correct but I think there is a lot of confusion in the  additional details there.</p>
+
+<p>The basic answer is in a <code>BLOB</code> data type / attribute domain. <strong>BLOB</strong> is short for Binary Large Object and that column data type is specific for handling binary data.</p>
+
+<p>See <a href=""http://dev.mysql.com/doc/refman/5.7/en/blob.html"" rel=""noreferrer"">the relevant manual page for MySQL</a>.</p>
+"
+27,11,,"<p>@jeff</p>
+<p>IMHO yours seems a little long. However it does seem a little more robust with support for &quot;yesterday&quot; and &quot;years&quot;.  But in my experience when this is used, the person is most likely to view the content in the first 30 days. It is only the really hardcore people that come after that. So, I usually elect to keep this short and simple.</p>
+<p>This is the method I am currently using in one of my websites. This returns only a relative day, hour and time.  And then the user has to slap on &quot;ago&quot; in the output.</p>
+<pre><code>public static string ToLongString(this TimeSpan time)
+{
+    string output = String.Empty;
+
+    if (time.Days &gt; 0)
+        output += time.Days + &quot; days &quot;;
+
+    if ((time.Days == 0 || time.Days == 1) &amp;&amp; time.Hours &gt; 0)
+        output += time.Hours + &quot; hr &quot;;
+
+    if (time.Days == 0 &amp;&amp; time.Minutes &gt; 0)
+        output += time.Minutes + &quot; min &quot;;
+
+    if (output.Length == 0)
+        output += time.Seconds + &quot; sec&quot;;
+
+    return output.Trim();
+}
+</code></pre>
+"
+29,13,,"<p>There are no HTTP headers that will report the clients timezone so far although it has been suggested to include it in the HTTP specification.</p>
+
+<p>If it was me, I would probably try to fetch the timezone using clientside JavaScript and then submit it to the server using Ajax or something.</p>
+"
+30,25,,"<p>I've had no trouble using the BSD sockets API in C++, in GNU/Linux. Here's the sample program I used:</p>
+
+<pre><code>#include &lt;sys/socket.h&gt;
+
+int
+main()
+{
+    return AF_INET;
+}
+</code></pre>
+
+<p>So my take on this is that z/OS is probably the complicating factor here, however, because I've never used z/OS before, much less programmed in it, I can't say this definitively. :-P</p>
+"
+31,6,,"<p>The parent <code>div</code> needs to have a defined <code>width</code>, either in pixels or as a percentage. In Internet&nbsp;Explorer&nbsp;7, the parent <code>div</code> needs a defined <code>width</code> for child percentage <code>div</code>s to work correctly.</p>
+"
+33,14,,"<p><code>Math.Floor</code> rounds down, <code>Math.Ceiling</code> rounds up, and <code>Math.Truncate</code> rounds towards zero. Thus, <code>Math.Truncate</code> is like <code>Math.Floor</code> for positive numbers, and like <code>Math.Ceiling</code> for negative numbers. Here's the <a href=""https://learn.microsoft.com/en-us/dotnet/api/system.math.truncate"" rel=""noreferrer"">reference</a>.</p>
+<p>For completeness, <code>Math.Round</code> rounds to the nearest integer. If the number is exactly midway between two integers, then it rounds towards the even one. <a href=""https://learn.microsoft.com/en-us/dotnet/api/system.math.round"" rel=""noreferrer"">Reference.</a></p>
+<p>See also: <a href=""https://stackoverflow.com/questions/14/whats-the-difference-between-math-floor-and-math-truncate-in-c/580252#580252"">Pax Diablo's answer</a>. Highly recommended!</p>
+"
+34,,"How to unload a ByteArray using Actionscript 3?","<p>How do I forcefully unload a <code>ByteArray</code> from memory using ActionScript 3?</p>
+
+<p>I have tried the following:</p>
+
+<pre><code>// First non-working solution
+byteArray.length = 0;
+byteArray = new ByteArray();
+
+// Second non-working solution
+for ( var i:int=0; i &lt; byteArray.length; i++ ) {
+    byteArray[i] = null;
+}
+</code></pre>
+"
+36,,"Check for changes to an SQL Server table?","<p>How can I monitor an SQL Server database for changes to a table without using triggers or modifying the structure of the database in any way? My preferred programming environment is <a href=""http://en.wikipedia.org/wiki/.NET_Framework"" rel=""noreferrer"">.NET</a> and C#.</p>
+
+<p>I'd like to be able to support any <a href=""http://en.wikipedia.org/wiki/Microsoft_SQL_Server#Genesis"" rel=""noreferrer"">SQL Server 2000</a> SP4 or newer. My application is a bolt-on data visualization for another company's product. Our customer base is in the thousands, so I don't want to have to put in requirements that we modify the third-party vendor's table at every installation.</p>
+
+<p>By <em>""changes to a table""</em> I mean changes to table data, not changes to table structure.</p>
+
+<p>Ultimately, I would like the change to trigger an event in my application, instead of having to check for changes at an interval.</p>
+
+<hr>
+
+<p>The best course of action given my requirements (no triggers or schema modification, SQL Server 2000 and 2005) seems to be to use the <code>BINARY_CHECKSUM</code> function in <a href=""http://en.wikipedia.org/wiki/Transact-SQL"" rel=""noreferrer"">T-SQL</a>. The way I plan to implement is this:</p>
+
+<p>Every X seconds run the following query:</p>
+
+<pre><code>SELECT CHECKSUM_AGG(BINARY_CHECKSUM(*))
+FROM sample_table
+WITH (NOLOCK);
+</code></pre>
+
+<p>And compare that against the stored value. If the value has changed, go through the table row by row using the query:</p>
+
+<pre><code>SELECT row_id, BINARY_CHECKSUM(*)
+FROM sample_table
+WITH (NOLOCK);
+</code></pre>
+
+<p>And compare the returned checksums against stored values.</p>
+"
+39,,"Reliable timer in a console application","<p>I am aware that in <a href=""http://en.wikipedia.org/wiki/.NET_Framework"" rel=""noreferrer"">.NET</a> there are three timer types (see <em><a href=""http://msdn.microsoft.com/en-us/magazine/cc164015.aspx"" rel=""noreferrer"">Comparing the Timer Classes in the .NET Framework Class Library</a></em>). I have chosen a threaded timer as the other types can drift if the main thread is busy, and I need this to be reliable.</p>
+
+<p>The way this timer works in the control of the timer is put on another thread so it can always tick along with the work begin completed on the parent thread when it is not busy.</p>
+
+<p>The issue with this timer in a console application is that while the timer is ticking along on another thread the main thread is not doing anything to the application closes.</p>
+
+<p>I tried adding a <code>while true</code> loop, but then the main thread is too busy when the timer does go off.</p>
+"
+42,,"Best way to allow plugins for a PHP application","<p>I am starting a new web application in PHP and this time around I want to create something that people can extend by using a plugin interface. </p>
+
+<p>How does one go about writing 'hooks' into their code so that plugins can attach to specific events?</p>
+"
+44,39,,"<p>Consider using a <a href=""https://learn.microsoft.com/en-us/dotnet/api/system.threading.manualresetevent"" rel=""noreferrer"">ManualResetEvent</a> to block the main thread at the end of its processing, and call <code>Reset()</code> on it once the timer's processing has finished.  If this is something that needs to run continuously, consider moving this into a service process instead of a console app.</p>
+"
+45,39,,"<p>You can use something like <code>Console.ReadLine()</code> to block the main thread, so other background threads (like timer threads) will still work. You may also use an <a href=""https://learn.microsoft.com/en-us/dotnet/api/system.threading.autoresetevent"" rel=""noreferrer"">AutoResetEvent</a> to block the execution, then (when you need to) you can call Set() method on that AutoResetEvent object to release the main thread. Also ensure that your reference to Timer object doesn't go out of scope and garbage collected.</p>
+"
+48,,"Multiple submit buttons in an HTML form","<p>Let's say you create a wizard in an HTML form. One button goes back, and one goes forward. Since the <em>back</em> button appears first in the markup when you press <kbd>Enter</kbd>, it will use that button to submit the form.</p>
+
+<p>Example:</p>
+
+<p><div class=""snippet"" data-lang=""js"" data-hide=""false"" data-console=""true"" data-babel=""false"">
+<div class=""snippet-code"">
+<pre class=""snippet-code-html lang-html prettyprint-override""><code>&lt;form&gt;
+  &lt;!-- Put your cursor in this field and press Enter --&gt;
+  &lt;input type=""text"" name=""field1"" /&gt;
+
+  &lt;!-- This is the button that will submit --&gt;
+  &lt;input type=""submit"" name=""prev"" value=""Previous Page"" /&gt;
+
+  &lt;!-- But this is the button that I WANT to submit --&gt;
+  &lt;input type=""submit"" name=""next"" value=""Next Page"" /&gt;
+&lt;/form&gt;</code></pre>
+</div>
+</div>
+</p>
+
+<p>I would like to get to decide which button is used to submit the form when a user presses <kbd>Enter</kbd>. That way, when you press <kbd>Enter</kbd> the wizard will move to the next page, not the previous. Do you have to use <code>tabindex</code> to do this?</p>
+"
+49,24,,"<p><a href=""https://web.archive.org/web/20180330233216/http://www.brokenbuild.com/blog/2006/08/15/mysql-triggers-how-do-you-abort-an-insert-update-or-delete-with-a-trigger/"" rel=""noreferrer"">Here is one hack</a> that may work. It isn't clean, but it looks like it might work:</p>
+
+<p>Essentially, you just try to update a column that doesn't exist.</p>
+"
+51,36,,"<p>Why don't you want to use triggers?  They are a good thing if you use them correctly.  If you use them as a way to enforce referential integrity that is when they go from good to bad.  But if you use them for monitoring, they are not really considered taboo.</p>
+"
+52,34,,"<p>Have a look at this article</p>
+
+<p><a href=""http://www.gskinner.com/blog/archives/2006/06/as3_resource_ma.html"" rel=""noreferrer"">http://www.gskinner.com/blog/archives/2006/06/as3_resource_ma.html</a></p>
+
+<p>IANA actionscript programmer, however the feeling I'm getting is that, because the garbage collector might not run when you want it to.</p>
+
+<p>Hence
+<a href=""http://www.craftymind.com/2008/04/09/kick-starting-the-garbage-collector-in-actionscript-3-with-air/"" rel=""noreferrer"">http://www.craftymind.com/2008/04/09/kick-starting-the-garbage-collector-in-actionscript-3-with-air/</a></p>
+
+<p>So I'd recommend trying out their collection code and see if it helps</p>
+
+<pre><code>private var gcCount:int;
+private function startGCCycle():void{
+    gcCount = 0;
+    addEventListener(Event.ENTER_FRAME, doGC);
+}
+private function doGC(evt:Event):void{
+    flash.system.System.gc();
+    if(++gcCount &gt; 1){
+        removeEventListener(Event.ENTER_FRAME, doGC);
+        setTimeout(lastGC, 40);
+    }
+}
+private function lastGC():void{
+    flash.system.System.gc();
+}
+</code></pre>
+"
+53,34,,"<p>(I'm not positive about this, but...)</p>
+<p>AS3 uses a non-deterministic garbage collection which means that dereferenced memory will be freed up whenever the runtime feels like it (typically not unless there's a reason to run, since it's an expensive operation to execute). This is the same approach used by most modern garbage collecting languages (like C# and Java as well).</p>
+<p>Assuming there are no other references to the memory pointed to by <code>byteArray</code> or the items within the array itself, the memory will be freed at some point after you exit the scope where <code>byteArray</code> is declared.</p>
+<p>You can force a garbage collection, though you really shouldn't. If you do, do it only for testing. If you do it in production, you'll hurt performance much more than help it.</p>
+<p>To force a GC, try (yes, twice):</p>
+<pre><code>flash.system.System.gc();
+flash.system.System.gc();
+</code></pre>
+<p><a href=""http://www.craftymind.com/2008/04/09/kick-starting-the-garbage-collector-in-actionscript-3-with-air/"" rel=""nofollow noreferrer"">You can read more here</a>.</p>
+"
+56,48,,"<p>Give your submit buttons the same name like this:</p>
+
+<pre><code>&lt;input type=""submit"" name=""submitButton"" value=""Previous Page"" /&gt;
+&lt;input type=""submit"" name=""submitButton"" value=""Next Page"" /&gt;
+</code></pre>
+
+<p>When the user presses <kbd>Enter</kbd> and the <em>request</em> goes to the server, you can check the value for <code>submitButton</code> on your server-side code which contains a collection of form <code>name/value</code> pairs. For example, in <a href=""http://en.wikipedia.org/wiki/Active_Server_Pages"" rel=""noreferrer"">ASP Classic</a>:</p>
+
+<pre class=""lang-vb prettyprint-override""><code>If Request.Form(""submitButton"") = ""Previous Page"" Then
+    ' Code for the previous page
+ElseIf Request.Form(""submitButton"") = ""Next Page"" Then
+    ' Code for the next page
+End If
+</code></pre>
+
+<p>Reference: <em><a href=""http://www.chami.com/tips/internet/042599I.html"" rel=""noreferrer"">Using multiple submit buttons on a single form</a></em></p>
+"
+58,48,,"<p>Change the previous button type into a button like this:  </p>
+
+<pre><code>&lt;input type=""button"" name=""prev"" value=""Previous Page"" /&gt;
+</code></pre>
+
+<p>Now the <em>Next</em> button would be the default, plus you could also add the <code>default</code> attribute to it so that your browser will highlight it like so:</p>
+
+<pre><code>&lt;input type=""submit"" name=""next"" value=""Next Page"" default /&gt;
+</code></pre>
+"
+59,,"How do I get a distinct, ordered list of names from a DataTable using LINQ?","<p>I have a <code>DataTable</code> with a <code>Name</code> column. I want to generate a collection of the unique names ordered alphabetically. The following query ignores the <em>order by</em> clause.</p>
+
+<pre><code>var names =
+    (from DataRow dr in dataTable.Rows
+    orderby (string)dr[""Name""]
+    select (string)dr[""Name""]).Distinct();
+</code></pre>
+
+<p>Why does the <code>orderby</code> not get enforced?</p>
+"
+60,34,,"<p>Unfortunately when it comes to memory management in <em>Flash/actionscript</em> there isn't a whole lot you can do. ActionScript was designed to be easy to use (so they didn't want people to have to worry about memory management)</p>
+
+<p>The following is a workaround, instead of creating a <code>ByteArray</code> variable try this.</p>
+
+<pre><code>var byteObject:Object = new Object();
+
+byteObject.byteArray = new ByteArray();
+
+...
+
+//Then when you are finished delete the variable from byteObject
+delete byteObject.byteArray;
+</code></pre>
+
+<p>Where <code>byteArray</code> is a dynamic property of <code>byteObject</code>, you can free the memory that was allocated for it.</p>
+"
+61,,"Microsoft Office 2007 file type, Mime types and identifying characters","<p>Where can I find a list of all of the MIME types and the identifying characters for <strong>Microsoft Office 2007</strong> files?</p>
+
+<p>I have an upload form that is restricting uploads based on the extensions and identifying characters, but I cannot seem to find the <strong>Office 2007 MIME</strong> types.</p>
+
+<p>Can anyone help?</p>
+"
+62,59,,"<p><strong>The problem is that the Distinct
+ operator does not grant that it will
+ maintain the original order of
+ values.</strong></p>
+
+<p>So your query will need to work like this</p>
+
+<pre><code>var names = (from DataRow dr in dataTable.Rows
+             select (string)dr[""Name""]).Distinct().OrderBy( name =&gt; name );
+</code></pre>
+"
+65,61,,"<p><a href=""http://www.bram.us/2007/05/25/office-2007-mime-types-for-iis/"" rel=""noreferrer"">Office 2007 MIME Types for IIS</a></p>
+
+<ul>
+<li><code>.docm</code>, application/vnd.ms-word.document.macroEnabled.12</li>
+<li><code>.docx</code>, application/vnd.openxmlformats-officedocument.wordprocessingml.document</li>
+<li><code>.dotm</code>, application/vnd.ms-word.template.macroEnabled.12</li>
+<li><code>.dotx</code>, application/vnd.openxmlformats-officedocument.wordprocessingml.template</li>
+<li><code>.potm</code>, application/vnd.ms-powerpoint.template.macroEnabled.12</li>
+<li><code>.potx</code>, application/vnd.openxmlformats-officedocument.presentationml.template</li>
+<li><code>.ppam</code>, application/vnd.ms-powerpoint.addin.macroEnabled.12</li>
+<li><code>.ppsm</code>, application/vnd.ms-powerpoint.slideshow.macroEnabled.12</li>
+<li><code>.ppsx</code>, application/vnd.openxmlformats-officedocument.presentationml.slideshow</li>
+<li><code>.pptm</code>, application/vnd.ms-powerpoint.presentation.macroEnabled.12</li>
+<li><code>.pptx</code>, application/vnd.openxmlformats-officedocument.presentationml.presentation</li>
+<li><code>.xlam</code>, application/vnd.ms-excel.addin.macroEnabled.12</li>
+<li><code>.xlsb</code>, application/vnd.ms-excel.sheet.binary.macroEnabled.12</li>
+<li><code>.xlsm</code>, application/vnd.ms-excel.sheet.macroEnabled.12</li>
+<li><code>.xlsx</code>, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</li>
+<li><code>.xltm</code>, application/vnd.ms-excel.template.macroEnabled.12</li>
+<li><code>.xltx</code>, application/vnd.openxmlformats-officedocument.spreadsheetml.template</li>
+</ul>
+"
+66,,"Paging a collection with LINQ","<p>How do you page through a collection in LINQ given that you have a <code>startIndex</code> and a <code>count</code>?</p>
+"
+68,66,,"<p>It is very simple with the <code>Skip</code> and <code>Take</code> extension methods.</p>
+
+<pre><code>var query = from i in ideas
+            select i;
+
+var paggedCollection = query.Skip(startIndex).Take(count);
+</code></pre>
+"
+71,19,,"<p>Here's a general description of a technique for calculating pi that I learnt in high school.</p>
+
+<p>I only share this because I think it is simple enough that anyone can remember it, indefinitely, plus it teaches you the concept of ""Monte-Carlo"" methods -- which are statistical methods of arriving at answers that don't immediately appear to be deducible through random processes.</p>
+
+<p>Draw a square, and inscribe a quadrant (one quarter of a semi-circle) inside that square (a quadrant with radius equal to the side of the square, so it fills as much of the square as possible)</p>
+
+<p>Now throw a dart at the square, and record where it lands -- that is, choose a random point anywhere inside the square. Of course, it landed inside the square, but is it inside the semi-circle? Record this fact.</p>
+
+<p>Repeat this process many times -- and you will find there is a ratio of the number of points inside the semi-circle versus the total number thrown, call this ratio x.</p>
+
+<p>Since the area of the square is r times r, you can deduce that the area of the semi circle is x times r times r (that is, x times r squared). Hence x times 4 will give you pi. </p>
+
+<p>This is not a quick method to use. But it's a nice example of a Monte Carlo method. And if you look around, you may find that many problems otherwise outside your computational skills can be solved by such methods.</p>
+"
+72,,"How do I add existing comments to RDoc in Ruby?","<p>I want to format my existing comments as 'RDoc comments' so they can be viewed using <code>ri</code>.</p>
+
+<p>What are some recommended resources for starting out using RDoc?</p>
+"
+73,25,,"<p>@Jax: The <code>extern ""C""</code> thing matters, very very much. If a header file doesn't have one, then (unless it's a C++-only header file), you would have to enclose your <code>#include</code> with it:</p>
+
+<pre><code>extern ""C"" {
+#include &lt;sys/socket.h&gt;
+// include other similarly non-compliant header files
+}
+</code></pre>
+
+<p>Basically, anytime where a C++ program wants to link to C-based facilities, the <code>extern ""C""</code> is vital. In practical terms, it means that the names used in external references will not be mangled, like normal C++ names would. <a href=""http://www.parashift.com/c++-faq-lite/mixing-c-and-cpp.html"" rel=""noreferrer"">Reference.</a></p>
+"
+76,42,,"<p>I believe the easiest way would be to follow Jeff's own advice and have a look around the existing code. Try looking at WordPress, Drupal, Joomla, and other well-known PHP-based CMS to see how their API hooks look and feel. This way you can even get ideas you may have not thought of previously to make things a little more robust.</p>
+<p>A more direct answer would be to write general files that they would &quot;include_once&quot; into their file that would provide the usability they would need. This would be broken up into categories and NOT provided in one MASSIVE &quot;hooks.php&quot; file. Be careful though, because what ends up happening is that files that they include end up having more and more dependencies and functionality improves. Try to keep API dependencies low. I.E fewer files for them to include.</p>
+"
+77,42,,"<p>You could use an Observer pattern.  A simple functional way to accomplish this:</p>
+
+<pre><code>&lt;?php
+
+/** Plugin system **/
+
+$listeners = array();
+
+/* Create an entry point for plugins */
+function hook() {
+    global $listeners;
+
+    $num_args = func_num_args();
+    $args = func_get_args();
+
+    if($num_args &lt; 2)
+        trigger_error(""Insufficient arguments"", E_USER_ERROR);
+
+    // Hook name should always be first argument
+    $hook_name = array_shift($args);
+
+    if(!isset($listeners[$hook_name]))
+        return; // No plugins have registered this hook
+
+    foreach($listeners[$hook_name] as $func) {
+        $args = $func($args); 
+    }
+    return $args;
+}
+
+/* Attach a function to a hook */
+function add_listener($hook, $function_name) {
+    global $listeners;
+    $listeners[$hook][] = $function_name;
+}
+
+/////////////////////////
+
+/** Sample Plugin **/
+add_listener('a_b', 'my_plugin_func1');
+add_listener('str', 'my_plugin_func2');
+
+function my_plugin_func1($args) {
+    return array(4, 5);
+}
+
+function my_plugin_func2($args) {
+    return str_replace('sample', 'CRAZY', $args[0]);
+}
+
+/////////////////////////
+
+/** Sample Application **/
+
+$a = 1;
+$b = 2;
+
+list($a, $b) = hook('a_b', $a, $b);
+
+$str  = ""This is my sample application\n"";
+$str .= ""$a + $b = "".($a+$b).""\n"";
+$str .= ""$a * $b = "".($a*$b).""\n"";
+
+$str = hook('str', $str);
+echo $str;
+?&gt;
+</code></pre>
+
+<p><strong>Output:</strong></p>
+
+<pre><code>This is my CRAZY application
+4 + 5 = 9
+4 * 5 = 20
+</code></pre>
+
+<p><strong>Notes:</strong></p>
+
+<p>For this example source code, you must declare all your plugins before the actual source code that you want to be extendable.  I've included an example of how to handle single or multiple values being passed to the plugin.  The hardest part of this is writing the actual documentation which lists what arguments get passed to each hook.</p>
+
+<p>This is just one method of accomplishing a plugin system in PHP.  There are better alternatives, I suggest you check out the WordPress Documentation for more information.</p>
+"
+78,4,,"<p>It sounds like <code>this.Opacity</code> is a double value, and the compiler doesn't like you trying to cram a decimal value into it.</p>
+"
+79,,"Getting Subclipse in Aptana to work with the newest release of Subversion","<p>The version of <strong>Subclipse (1.2.4)</strong> currently available through Aptana's automatic <em>Plugins Manager</em> does not work with the newest version of Subversion.</p>
+
+<p>I see on the Subclipse website however that they have 1.4.2 out for Eclipse. So I added a <a href=""http://subclipse.tigris.org/update_1.4.x"" rel=""noreferrer"">new remote update site</a> to my Update manager. When I tried to install it, it told me I needed <strong>Mylyn 3.0.0</strong>. So after much searching I found Mylyn 3.0.0 and added <a href=""http://download.eclipse.org/tools/mylyn/update/e3.3"" rel=""noreferrer"">another new remote update site</a> to my update manager. Then when I tried to install that, it told me I needed <strong>org.eclipse.ui 3.3.0</strong> or equivalent.</p>
+
+<p>Looking at the configuration details for Aptana, it looks like it is built against eclipse 3.2.2.</p>
+
+<p>Does anyone know if there is a way to upgrade the version of Eclipse Aptana that is built against to 3.3.0? Or if there is some other way to get Subclipse to work with the very newest version of Subversion?</p>
+
+<p>I know this isn't necessarily a ""programming"" question, but I hope it's ok since it's highly relevant to the programming experience.</p>
+"
+80,,"SQLStatement.execute() - multiple queries in one statement","<p>I've written a database generation script in <a href=""http://en.wikipedia.org/wiki/SQL"" rel=""noreferrer"">SQL</a> and want to execute it in my <a href=""http://en.wikipedia.org/wiki/Adobe_Integrated_Runtime"" rel=""noreferrer"">Adobe AIR</a> application:</p>
+
+<pre><code>Create Table tRole (
+    roleID integer Primary Key
+    ,roleName varchar(40)
+);
+Create Table tFile (
+    fileID integer Primary Key
+    ,fileName varchar(50)
+    ,fileDescription varchar(500)
+    ,thumbnailID integer
+    ,fileFormatID integer
+    ,categoryID integer
+    ,isFavorite boolean
+    ,dateAdded date
+    ,globalAccessCount integer
+    ,lastAccessTime date
+    ,downloadComplete boolean
+    ,isNew boolean
+    ,isSpotlight boolean
+    ,duration varchar(30)
+);
+Create Table tCategory (
+    categoryID integer Primary Key
+    ,categoryName varchar(50)
+    ,parent_categoryID integer
+);
+...
+</code></pre>
+
+<p>I execute this in Adobe AIR using the following methods:</p>
+
+<pre><code>public static function RunSqlFromFile(fileName:String):void {
+    var file:File = File.applicationDirectory.resolvePath(fileName);
+    var stream:FileStream = new FileStream();
+    stream.open(file, FileMode.READ)
+    var strSql:String = stream.readUTFBytes(stream.bytesAvailable);
+    NonQuery(strSql);
+}
+
+public static function NonQuery(strSQL:String):void {
+    var sqlConnection:SQLConnection = new SQLConnection();
+    sqlConnection.open(File.applicationStorageDirectory.resolvePath(DBPATH));
+    var sqlStatement:SQLStatement = new SQLStatement();
+    sqlStatement.text = strSQL;
+    sqlStatement.sqlConnection = sqlConnection;
+    try {
+        sqlStatement.execute();
+    } catch (error:SQLError) {
+        Alert.show(error.toString());
+    }
+}
+</code></pre>
+
+<p>No errors are generated, however only <code>tRole</code> exists. It seems that it only looks at the first query (up to the semicolon- if I remove it, the query fails). Is there a way to call multiple queries in one statement?</p>
+"
+81,34,,"<p>I believe you have answered your own question.</p>
+<p><code>System.totalMemory</code> gives you the total amount of memory being &quot;used&quot;, not allocated. It is accurate that your application may only be using 20 MB, but it has 5 MB that is free for future allocations.</p>
+<p>I'm not sure whether the Adobe docs would shed light on the way that it manages memory.</p>
+"
+82,36,,"<p>Have a DTS job (or a job that is started by a windows service) that runs at a given interval. Each time it is run, it gets information about the given table by using the system <a href=""http://msdn.microsoft.com/en-us/library/ms186778.aspx"" rel=""noreferrer"">INFORMATION_SCHEMA</a> tables, and records this data in the data repository. Compare the data returned regarding the structure of the table with the data returned the previous time. If it is different, then you know that the structure has changed.</p>
+
+<p>Example query to return information regarding all of the columns in table ABC (ideally listing out just the columns from the INFORMATION_SCHEMA table that you want, instead of using *select ** like I do here):</p>
+
+<pre><code>select * from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME = 'ABC'
+</code></pre>
+
+<p>You would monitor different columns and INFORMATION_SCHEMA views depending on how exactly you define ""changes to a table"".</p>
+"
+84,16,,"<p>If you use a return type of <code>IEnumerable</code>, you can return your <strong>query</strong> variable directly.</p>
+"
+85,,"Flat file databases","<p>What are the best practices around creating flat file database structures in PHP?</p>
+
+<p>A lot of more matured PHP flat file frameworks out there which I attempt to implement SQL-like query syntax which is over the top for my purposes in most cases. (I would just use a database at that point).</p>
+
+<p>Are there any elegant tricks out there to get good performance and features with a small code overhead?</p>
+"
+86,4,,"<p><strong>A more generic answer for the generic question &quot;Decimal vs Double?&quot;:</strong></p>
+<p><strong>Decimal</strong> is for monetary calculations to preserve precision. <strong>Double</strong> is for scientific calculations that do not get affected by small differences. Since Double is a type that is native to the CPU (internal representation is stored in <em>base 2</em>), calculations made with Double perform better than Decimal (which is represented in <em>base 10</em> internally).</p>
+"
+87,85,,"<p>One framework I'm considering would be for a blogging platform. Since just about any possible view of data you would want would be sorted by date, I was thinking about this structure:</p>
+
+<p>One directory per content node:</p>
+
+<pre><code>./content/YYYYMMDDHHMMSS/
+</code></pre>
+
+<p>Subdirectories of each node including  </p>
+
+<pre><code>/tags  
+/authors  
+/comments  
+</code></pre>
+
+<p>As well as simple text files in the node directory for pre- and post-rendered content and the like.</p>
+
+<p>This would allow a simple PHP <a href=""http://us3.php.net/glob"" rel=""noreferrer""><code>glob()</code></a> call (and probably a reversal of the result array) to query on just about anything within the content structure:</p>
+
+<pre><code>glob(""content/*/tags/funny"");  
+</code></pre>
+
+<p>Would return paths including all articles tagged ""funny"".</p>
+"
+88,,"Is gettimeofday() guaranteed to be of microsecond resolution?","<p>I am porting a game, that was originally written for the Win32 API, to Linux (well, porting the OS X port of the Win32 port to Linux).</p>
+
+<p>I have implemented <code>QueryPerformanceCounter</code> by giving the uSeconds since the process start up:     </p>
+
+<pre><code>BOOL QueryPerformanceCounter(LARGE_INTEGER* performanceCount)
+{
+    gettimeofday(&amp;currentTimeVal, NULL);
+    performanceCount-&gt;QuadPart = (currentTimeVal.tv_sec - startTimeVal.tv_sec);
+    performanceCount-&gt;QuadPart *= (1000 * 1000);
+    performanceCount-&gt;QuadPart += (currentTimeVal.tv_usec - startTimeVal.tv_usec);
+
+    return true;
+}
+</code></pre>
+
+<p>This, coupled with <code>QueryPerformanceFrequency()</code> giving a constant 1000000 as the frequency, works well <b>on my machine</b>, giving me a 64-bit variable that contains <code>uSeconds</code> since the program's start-up.</p>
+
+<p>So <em>is this portable?</em> I don't want to discover it works differently if the kernel was compiled in a certain way or anything like that. I am fine with it being non-portable to something other than Linux, however.</p>
+"
+89,79,,"<p>I've had problems with JavaHL in Eclipse Ganymede, when it worked fine in Eclipse Europa.  I'm not sure how Aptana is different, but try either upgrading JavaHL or switching to the pure-java SVNKit implementation within the Subclipse config.</p>
+"
+90,,"How do you branch and merge with TortoiseSVN?","<p>How do you <a href=""http://svnbook.red-bean.com/en/1.8/svn.branchmerge.html"" rel=""noreferrer"">branch and merge</a> with Apache Subversion using the TortoiseSVN client? </p>
+"
+92,90,,"<p><a href=""http://svnbook.red-bean.com/"" rel=""noreferrer"">Version Control with Subversion</a></p>
+
+<p>A very good resource for source control in general. Not really TortoiseSVN specific, though.</p>
+"
+93,88,,"<p>From my experience, and from what I've read across the internet, the answer is ""No,"" it is not guaranteed.  It depends on CPU speed, operating system, flavor of Linux, etc.</p>
+"
+98,88,,"<p>Maybe. But you have bigger problems. <code>gettimeofday()</code> can result in incorrect timings if there are processes on your system that change the timer (ie, ntpd). On a ""normal"" linux, though, I believe the resolution of <code>gettimeofday()</code> is 10us. It can jump forward and backward and time, consequently, based on the processes running on your system. This effectively makes the answer to your question no.</p>
+
+<p>You should look into <code>clock_gettime(CLOCK_MONOTONIC)</code> for timing intervals. It suffers from several less issues due to things like multi-core systems and external clock settings.</p>
+
+<p>Also, look into the <code>clock_getres()</code> function.</p>
+"
+99,88,,"<blockquote>
+  <p>The actual resolution of gettimeofday() depends on the hardware architecture. Intel processors as well as SPARC machines offer high resolution timers that measure microseconds. Other hardware architectures fall back to the system’s timer, which is typically set to 100 Hz. In such cases, the time resolution will be less accurate. </p>
+</blockquote>
+
+<p>I obtained this answer from <a href=""http://web.archive.org/web/20160711223333/http://www.informit.com/guides/content.aspx?g=cplusplus&amp;seqNum=272"" rel=""nofollow noreferrer"">High Resolution Time Measurement and Timers, Part I</a></p>
+"
+103,13,,"<p>JavaScript is the easiest way to get the client's local time. I would suggest using an <a href=""http://en.wikipedia.org/wiki/XMLHttpRequest"" rel=""noreferrer"">XMLHttpRequest</a> to send back the local time, and if that fails, fall back to the timezone detected based on their IP address.</p>
+
+<p>As far as geolocation, I've used <a href=""http://www.maxmind.com/app/ip-location"" rel=""noreferrer"">MaxMind GeoIP</a> on several projects and it works well, though I'm not sure if they provide timezone data. It's a service you pay for and they provide monthly updates to your database. They provide wrappers in several web languages.</p>
+"
+104,,"Anatomy of a ""Memory Leak""","<p>In .NET perspective:</p>
+
+<ul>
+<li>What is a <a href=""https://en.wikipedia.org/wiki/Memory_leak"" rel=""noreferrer"">memory leak</a>?</li>
+<li>How can you determine whether your application leaks? What are the effects?</li>
+<li>How can you prevent a memory leak?</li>
+<li>If your application has memory leak, does it go away when the process exits or is killed? Or do memory leaks in your application affect other processes on the system even after process completion?</li>
+<li>And what about unmanaged code accessed via COM Interop and/or P/Invoke?</li>
+</ul>
+"
+107,104,,"<p>I guess in a managed environment, a leak would be you keeping an unnecessary reference to a large chunk of memory around.</p>
+"
+108,,"Best Subversion clients for Windows Vista (64bit)","<p>I've been using <a href=""https://web.archive.org/web/20200229173754/http://tortoisesvn.tigris.org/"" rel=""noreferrer"">TortoiseSVN </a> in a Windows environment for quite some time.  It seems very feature-complete and nicely integrated into the Windows shell, and more importantly, it's fairly painless to teach to colleagues with little or no experience with source control.  <strong>However</strong>, since we have moved to Windows Vista 64bit, Tortoise has been very buggy and has seemed to cause lots of explorer.exe abnormalities and crashes.  This has happened both with older versions of the software and the latest version (1.5.1 build 13563).</p>
+
+<p>I was curious if anyone has suggestions for other Subversion clients that will run on Windows (specifically Vista 64bit).  Developers here use a variety of text editors so using Visual Studio or Dreamweaver for SVN is not ideal.</p>
+
+<p>I have heard great things about <a href=""http://www.zennaware.com/cornerstone/"" rel=""noreferrer"">Cornerstone</a>, and would love something similar for Windows if it exists.</p>
+
+<hr>
+
+<p>I'm correlating the Vista/explorer problems with Tortoise because they normally occur when I'm using the functionality in Tortoise.  Sometimes bringing up the ""merge"" screen will cause the GUI to start acting very strange and eventually hang or crash.</p>
+
+<p>I did not see 1.5.2 -- I'm installing now, maybe that will fix some of my issues.</p>
+"
+109,,"Decoding T-SQL CAST in C#/VB.NET","<p>Recently our site has been deluged with the resurgence of the <a href=""https://en.wikipedia.org/wiki/Asprox_botnet"" rel=""noreferrer"">Asprox botnet</a> <a href=""http://en.wikipedia.org/wiki/SQL_injection"" rel=""noreferrer"">SQL injection</a> attack. Without going into details, the attack attempts to execute SQL code by encoding the <a href=""http://en.wikipedia.org/wiki/Transact-SQL"" rel=""noreferrer"">T-SQL</a> commands in an ASCII encoded BINARY string. It looks something like this:</p>
+
+<pre><code>DECLARE%20@S%20NVARCHAR(4000);SET%20@S=CAST(0x44004500...06F007200%20AS%20NVARCHAR(4000));EXEC(@S);--
+</code></pre>
+
+<p>I was able to decode this in SQL, but I was a little wary of doing this since I didn't know exactly what was happening at the time.</p>
+
+<p>I tried to write a simple decode tool, so I could decode this type of text without even touching <a href=""http://en.wikipedia.org/wiki/Microsoft_SQL_Server"" rel=""noreferrer"">SQL&nbsp; Server</a>. The main part I need to be decoded is:</p>
+
+<pre><code>CAST(0x44004500...06F007200 AS
+NVARCHAR(4000))
+</code></pre>
+
+<p>I've tried all of the following commands with no luck:</p>
+
+<pre><code>txtDecodedText.Text =
+    System.Web.HttpUtility.UrlDecode(txtURLText.Text);
+txtDecodedText.Text =
+    Encoding.ASCII.GetString(Encoding.ASCII.GetBytes(txtURLText.Text));
+txtDecodedText.Text =
+    Encoding.Unicode.GetString(Encoding.Unicode.GetBytes(txtURLText.Text));
+txtDecodedText.Text =
+    Encoding.ASCII.GetString(Encoding.Unicode.GetBytes(txtURLText.Text));
+txtDecodedText.Text =
+    Encoding.Unicode.GetString(Convert.FromBase64String(txtURLText.Text));
+</code></pre>
+
+<p>What is the proper way to translate this encoding without using SQL Server? Is it possible? I'll take VB.NET code since I'm familiar with that too.</p>
+
+<hr>
+
+<p>Okay, I'm sure I'm missing something here, so here's where I'm at.</p>
+
+<p>Since my input is a basic string, I started with just a snippet of the encoded portion - 4445434C41 (which translates to DECLA) - and the first attempt was to do this...</p>
+
+<pre><code>txtDecodedText.Text = Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(txtURL.Text));
+</code></pre>
+
+<p>...and all it did was return the exact same thing that I put in since it converted each character into is a byte.</p>
+
+<p>I realized that I need to parse every two characters into a byte manually since I don't know of any methods yet that will do that, so now my little decoder looks something like this:</p>
+
+<pre><code>while (!boolIsDone)
+{
+    bytURLChar = byte.Parse(txtURLText.Text.Substring(intParseIndex, 2));
+    bytURL[intURLIndex] = bytURLChar;
+    intParseIndex += 2;
+    intURLIndex++;
+
+    if (txtURLText.Text.Length - intParseIndex &lt; 2)
+    {
+        boolIsDone = true;
+    }
+}
+
+txtDecodedText.Text = Encoding.UTF8.GetString(bytURL);
+</code></pre>
+
+<p>Things look good for the first couple of pairs, but then the loop balks when it gets to the ""4C"" pair and says that the string is in the incorrect format.</p>
+
+<p>Interestingly enough, when I step through the debugger and to the GetString method on the byte array that I was able to parse up to that point, I get "",-+"" as the result.</p>
+
+<p>How do I figure out what I'm missing - do I need to do a ""direct cast"" for each byte instead of attempting to parse it?</p>
+"
+110,104,,"<p>I will concur with Bernard as to in .net what a mem leak would be.</p>
+
+<p>You could profile your application to see its memory use, and determine that if its managing a lot of memory when it should not be you could say it has a leak.</p>
+
+<p>In managed terms I will put my neck on the line to say it does go away once the process is killed/removed.</p>
+
+<p>Unmanaged code is its own beast and if a leak exists within it, it will follow a standard mem. leak definition.</p>
+"
+111,108,,"<p>I have been using the 64Bit version of TortoiseSVN for ages and I have never had issues with it on Windows 64Bit or Vista 64Bit. I am currently not aware of any other similiar SVN clients that do work on Vista. Is it possible the problem could lie within the configuration of TortoiseSVN or even the installation of Vista? Is the problem occurring on Vista native or SP 1?</p>
+"
+112,104,,"<p>The best explanation I've seen is in Chapter 7 of the free <a href=""http://codebetter.com/karlseguin/2008/06/25/foundations-of-programming-ebook/"" rel=""noreferrer"">Foundations of Programming e-book</a>.</p>
+
+<p>Basically, in <strong>.NET</strong> a memory leak occurs when referenced objects are rooted and thus cannot be garbage collected. This occurs accidentally when you hold on to references beyond the intended scope.</p>
+
+<p>You'll know that you have leaks when you start getting OutOfMemoryExceptions or your memory usage goes up beyond what you'd expect (<strong>PerfMon</strong> has nice memory counters). </p>
+
+<p>Understanding <strong>.NET</strong>'s memory model is your best way of avoiding it. Specifically, understanding how the garbage collector works and how references work — again, I refer you to chapter 7 of the e-book. Also, be mindful of common pitfalls, probably the most common being events. If object <strong>A</strong> is registered to an event on object <strong>B</strong>, then object <strong>A</strong> will stick around until object <strong>B</strong> disappears because <strong>B</strong> holds a reference to <strong>A</strong>. The solution is to unregister your events when you're done. </p>
+
+<p>Of course, a good memory profile will let you see your object graphs and explore the nesting/referencing of your objects to see where references are coming from and what root object is responsible (<a href=""http://www.red-gate.com/products/ants_memory_profiler/index.htm"" rel=""noreferrer"">red-gate ants profile</a>, JetBrains dotMemory, <a href=""http://memprofiler.com/"" rel=""noreferrer"">memprofiler</a> are really good choices, or you can use the text-only <strong>WinDbg</strong> and <strong>SOS</strong>, but I'd strongly recommend a commercial/visual product unless you're a real guru).</p>
+
+<p>I believe unmanaged code is subject to its typical memory leaks, except that shared references are managed by the garbage collector. I could be wrong about this last point.</p>
+"
+113,108,,"<p>I'll second Diago's answer.  I use TortoiseSVN on Vista x64 pretty heavily.</p>
+
+<p>I did upgrade directly from an older version to 1.5.2 though, and never used 1.5.1.  Have you tried 1.5.2?</p>
+"
+114,108,,"<p>TortoiseSVN in combination with VisualSVN for Visual Studio.</p>
+"
+116,108,,"<p>I too get explorer crashes in Vista (I'm not in the 64Bit version though). I'm using Vista Super Saijen (or whatever they are calling the most expensive version). I'm not having any bugs with Tortoise.</p>
+
+<p>My explorer does, however, crash about every other day (sometimes multiple times a day if it's having an ""off"" day). I'm not positive it's being caused by TortoiseSVN though. From what I hear, the explorer just crashes a lot in Vista...</p>
+
+<p>Have you tried uninstalling Tortoise and using Windows for a day or two and seeing if it still crashes? Do you restart your computer at least once a day (It seems the longer I go between restarts, the worse the crashes get)?</p>
+"
+120,,"ASP.NET Site Maps","<p>Does anyone have experience creating SQL-based ASP.NET site-map providers?</p>
+
+<p>I have the default XML file <code>web.sitemap</code> working properly with my Menu and SiteMapPath controls, but I'll need a way for the users of my site to create and modify pages dynamically.</p>
+
+<p>I need to tie page viewing permissions into the standard <code>ASP.NET</code> membership system as well.</p>
+"
+123,,"Java lib or app to convert CSV to XML file?","<p>Is there an existing application or library in <em>Java</em> which will allow me to convert a <code>CSV</code> data file to <code>XML</code> file?  </p>
+
+<p>The <code>XML</code> tags would be provided through possibly the first row containing column headings.</p>
+"
+124,80,,"<p>I wound up using this. It is a kind of a hack, but it actually works pretty well. </p>
+
+<p>The only thing is you have to be very careful with your semicolons. : D</p>
+
+<pre><code>var strSql:String = stream.readUTFBytes(stream.bytesAvailable);      
+var i:Number = 0;
+var strSqlSplit:Array = strSql.split("";"");
+for (i = 0; i &lt; strSqlSplit.length; i++){
+    NonQuery(strSqlSplit[i].toString());
+}
+</code></pre>
+"
+126,,"How would you access Object properties from within an object method?","<p>What is the ""purist"" or ""correct"" way to access an object's properties from within an object method that is not a getter/setter method?</p>
+
+<p>I know that from outside of the object you should use a getter/setter, but from within would you just do:</p>
+
+<p>Java:</p>
+
+<pre><code>String property = this.property;
+</code></pre>
+
+<p>PHP:</p>
+
+<pre><code>$property = $this-&gt;property;
+</code></pre>
+
+<p>or would you do:</p>
+
+<p>Java:</p>
+
+<pre><code>String property = this.getProperty();
+</code></pre>
+
+<p>PHP:</p>
+
+<pre><code>$property = $this-&gt;getProperty();
+</code></pre>
+
+<p>Forgive me if my Java is a little off, it's been a year since I programmed in Java...</p>
+
+<p><strong>EDIT:</strong></p>
+
+<p>It seems people are assuming I am talking about private or protected variables/properties only. When I learned OO I was taught to use getters/setters for every single property even if it was public (and actually I was told never to make any variable/property public). So, I may be starting off from a false assumption from the get go. It appears that people answering this question are maybe saying that you should have public properties and that those don't need getters and setters, which goes against what I was taught, and what I was talking about, although maybe that needs to be discussed as well. That's probably a good topic for a different question though...</p>
+"
+127,126,,"<p>This has religious war potential, but it seems to me that if you're using a getter/setter, you should use it internally as well - using both will lead to maintenance problems down the road (e.g. somebody adds code to a setter that <em>needs</em> to run every time that property is set, and the property is being set internally w/o that setter being called).</p>
+"
+128,126,,"<p>It depends on how the property is used. For example, say you have a student object that has a name property. You could use your Get method to pull the name from the database, if it hasn't been retrieved already. This way you are reducing unnecessary calls to the database.</p>
+
+<p>Now let's say you have a private integer counter in your object that counts the number of times the name has been called. You may want to not use the Get method from inside the object because it would produce an invalid count.</p>
+"
+129,,"How to export data from SQL Server 2005 to MySQL","<p>I've been banging my head against <code>SQL Server 2005</code> trying to get a lot of data out.  I've been given a database with nearly 300 tables in it and I need to turn this into a MySQL database.  My first call was to use bcp but unfortunately it doesn't produce valid CSV - strings aren't encapsulated, so you can't deal with any row that has a string with a comma in it (or whatever you use as a delimiter) and I would still have to hand write all of the create table statements, as obviously CSV doesn't tell you anything about the data types.</p>
+
+<p>What would be better is if there was some tool that could connect to both SQL Server and MySQL, then do a copy. You lose views, stored procedures, trigger, etc, but it isn't hard to copy a table that only uses base types from one DB to another... is it?</p>
+
+<p>Does anybody know of such a tool?  I don't mind how many assumptions it makes or what simplifications occur, as long as it supports integer, float, datetime and string. I have to do a lot of pruning, normalising, etc. anyway so I don't care about keeping keys, relationships or anything like that, but I need the initial set of data in fast!</p>
+"
+133,123,,"<p>This may be too basic or limited of a solution, but couldn't you do a <a href=""https://docs.oracle.com/javase/7/docs/api/java/lang/String.html#split(java.lang.String)"" rel=""nofollow noreferrer""><code>String.split()</code></a> on each line of the file, remembering the result array of the first line to generate the XML, and just spit each line's array data out with the proper XML elements padding each iteration of a loop?</p>
+"
+134,,"XSD DataSets and ignoring foreign keys","<p>I have a pretty standard table set-up in a current application using the <a href=""https://en.wikipedia.org/wiki/.NET_Framework"" rel=""noreferrer"">.NET</a> <a href=""https://en.wikipedia.org/wiki/XML_Schema_%28W3C%29"" rel=""noreferrer"">XSD</a> <code>DataSet</code> and <code>TableAdapter</code> features. My <code>contracts</code> table consists of some standard contract information, with a column for the <code>primary department</code>. This column is a <a href=""https://en.wikipedia.org/wiki/Foreign_key"" rel=""noreferrer"">foreign key</a> to my <code>Departments</code> table, where I store the basic <code>department name</code>, <code>id</code>, <code>notes</code>. This is all setup and functioning in my <a href=""https://en.wikipedia.org/wiki/Microsoft_SQL_Server"" rel=""noreferrer"">SQL Server</a>.</p>
+
+<p>When I use the XSD tool, I can drag both tables in at once and it auto detects/creates the foreign key I have between these two tables. This works great when I'm on my main page and am viewing contract data.</p>
+
+<p>However, when I go to my administrative page to modify the department data, I typically do something like this:</p>
+
+<pre><code>Dim dtDepartment As New DepartmentDataTable()
+Dim taDepartment As New DepartmentTableAdapter()
+
+taDepartment.Fill(dtDepartment)
+</code></pre>
+
+<p>However, at this point an exception is thrown saying to the effect that there is a foreign key reference broken here, I'm guessing since I don't have the <code>Contract DataTable</code> filled.</p>
+
+<p>How can I fix this problem? I know I can simply remove the foreign key from the XSD to make things work fine, but having the additional integrity check there and having the XSD schema match the SQL schema in the database is nice.</p>
+"
+135,129,,"<p>Rolling your own PHP solution will certainly work though I'm not sure if there is a good way to automatically duplicate the schema from one DB to the other (maybe this was your question).</p>
+
+<p>If you are just copying data, and/or you need custom code anyway to convert between modified schemas between the two DB's, I would recommend using PHP 5.2+ and the PDO libraries.  You'll be able to connect using PDO ODBC (and use MSSQL drivers).  I had a lot of problems getting large text fields and multi-byte characters from MSSQL into PHP using other libraries.</p>
+"
+139,126,,"<blockquote>
+  <p>Am I just going overboard here?</p>
+</blockquote>
+
+<p>Perhaps ;)</p>
+
+<p>Another approach would be to utilize a private/protected method to actually do the getting (caching/db/etc), and a public wrapper for it that increments the count:</p>
+
+<p>PHP:</p>
+
+<pre><code>public function getName() {
+    $this-&gt;incrementNameCalled();
+    return $this-&gt;_getName();
+}
+
+protected function _getName() {
+    return $this-&gt;name;
+}
+</code></pre>
+
+<p>and then from within the object itself:</p>
+
+<p>PHP:</p>
+
+<pre><code>$name = $this-&gt;_getName();
+</code></pre>
+
+<p>This way you can still use that first argument for something else (like sending a flag for whether or not to used cached data here perhaps).</p>
+"
+141,129,,"<p>Another tool to try would be the <a href=""http://www.sqlmaestro.com"" rel=""nofollow noreferrer"">SQLMaestro suite</a>. It is a little tricky nailing down the precise tool, but they have a variety of tools, both free and for purchase that handle a wide variety of tasks for multiple database platforms. I'd suggest trying the Data Wizard tool first for MySQL, since I believe that will have the proper &quot;import&quot; tool you need.</p>
+"
+142,126,,"<p>Well, it seems with C# 3.0 properties' default implementation, the decision is taken for you; you HAVE to set the property using the (possibly private) property setter.</p>
+
+<p>I personally only use the private member-behind when not doing so would cause the object to fall in an less than desirable state, such as when initializing or when caching/lazy loading is involved.</p>
+"
+143,126,,"<p>As stated in some of the comments: Sometimes you should, sometimes you shouldn't. The great part about private variables is that you are able to see all the places they are used when you change something. If your getter/setter does something you need, use it. If it doesn't matter you decide.</p>
+
+<p>The opposite case could be made that if you use the getter/setter and somebody changes the getter/setter they have to analyze all the places the getter and setter is used internally to see if it messes something up.</p>
+"
+145,,"Compressing / Decompressing Folders & Files","<p>Does anyone know of a good way to compress or decompress files and folders in C# quickly? Handling large files might be necessary.</p>
+"
+146,,"How do I track file downloads","<p>I have a website that plays mp3s in a flash player. If a user clicks 'play' the flash player automatically downloads an mp3 and starts playing it. </p>
+
+<p>Is there an easy way to track how many times a particular song clip (or any binary file) has been downloaded?</p>
+
+<hr>
+
+<blockquote>
+  <p>Is the play link a link to the actual
+  mp3 file or to some javascript code
+  that pops up a player?</p>
+  
+  <p>If the latter, you can easily add your
+  own logging code in there to track the
+  number of hits to it.</p>
+  
+  <p>If the former, you'll need something
+  that can track the web server log
+  itself and make that distinction. My
+  hosting plan comes with Webalizer,
+  which does this nicely.</p>
+</blockquote>
+
+<p>It's a javascript code so that answers that. </p>
+
+<p>However, it would be nice to know how to track downloads using the other method (without switching hosts).</p>
+"
+147,42,,"<p>The <em>hook</em> and <em>listener</em> method is the most commonly used, but there are other things you can do.  Depending on the size of your app, and who your going to allow see the code (is this going to be a FOSS script, or something in house) will influence greatly how you want to allow plugins.</p>
+
+<p>kdeloach has a nice example, but his implementation and hook function is a little unsafe.  I would ask for you to give more information of the nature of php app your writing, And how you see plugins fitting in.  </p>
+
+<p>+1 to kdeloach from me.</p>
+"
+148,146,,"<p>Is the play link a link to the actual mp3 file or to some javascript code that pops up a player? </p>
+
+<p>If the latter, you can easily add your own logging code in there to track the number of hits to it.</p>
+
+<p>If the former, you'll need something that can track the web server log itself and make that distinction. My hosting plan comes with webalizer, which does this nicely.</p>
+"
+149,145,,"<p>As of .Net 1.1 the only available method is reaching into the java libraries.</p>
+
+<p><a href=""https://learn.microsoft.com/en-us/archive/msdn-magazine/2003/june/using-jsharp-class-libraries-to-compress-files-and-data-with-csharp"" rel=""nofollow noreferrer"">Using the Zip Classes in the J# Class Libraries to Compress Files and Data with C#</a></p>
+
+<p>Not sure if this has changed in recent versions.</p>
+"
+151,145,,"<p>I've always used the SharpZip Library.</p>
+
+<p><a href=""http://sharpdevelop.net/OpenSource/SharpZipLib/Download.aspx"" rel=""noreferrer"">Here's a link</a></p>
+"
+152,146,,"<p>The funny thing is I wrote a php media gallery for all my musics 2 days ago. I had a similar problem.  I'm using <a href=""http://musicplayer.sourceforge.net/"" rel=""nofollow noreferrer"">http://musicplayer.sourceforge.net/</a> for the player. And the playlist is built via php. All music requests go to a script called xfer.php?file=WHATEVER</p>
+<pre><code>$filename = base64_url_decode($_REQUEST['file']);
+header(&quot;Cache-Control: public&quot;);
+header('Content-disposition: attachment; filename='.basename($filename));
+header(&quot;Content-Transfer-Encoding: binary&quot;);
+header('Content-Length: '. filesize($filename));
+
+//  Put either file counting code here, either a db or static files
+//
+readfile($filename);  //and spit the user the file
+
+function base64_url_decode($input) {
+    return base64_decode(strtr($input, '-_,', '+/='));
+}
+</code></pre>
+<p>And when you call files use something like:</p>
+<pre><code>function base64_url_encode($input) {
+     return strtr(base64_encode($input), '+/=', '-_,');
+}
+</code></pre>
+<p><a href=""http://us.php.net/manual/en/function.base64-encode.php"" rel=""nofollow noreferrer"">http://us.php.net/manual/en/function.base64-encode.php</a></p>
+<p>If you are using some JavaScript or a flash player (JW player for example) that requires the actual link of an mp3 file or whatever, you can append the text &quot;&amp;type=.mp3&quot; so the final link becomes something like:
+&quot;www.example.com/xfer.php?file=34842ffjfjxfh&amp;type=.mp3&quot;. That way it looks like it ends with an mp3 extension without affecting the file link.</p>
+"
+153,146,,"<p>You could even set up an Apache .htaccess directive that converts *.mp3 requests into the querystring dubayou is working with.  It might be an elegant way to keep the direct request and still be able to slipstream log function into the response.</p>
+"
+154,85,,"<p>Well, what is the nature of the flat databases.  Are they large or small.  Is it simple arrays with arrays in them?  if its something simple say userprofiles built as such:</p>
+<pre><code>$user = array(&quot;name&quot; =&gt; &quot;bob&quot;, 
+              &quot;age&quot; =&gt; 20,
+              &quot;websites&quot; =&gt; array(&quot;example.com&quot;,&quot;bob.example.com&quot;,&quot;bob2.example.com&quot;),
+              &quot;and_one&quot; =&gt; &quot;more&quot;);
+</code></pre>
+<p>and to save or update the <em>db record</em> for that user.</p>
+<pre><code>$dir = &quot;../userdata/&quot;;  //make sure to put it bellow what the server can reach.
+file_put_contents($dir.$user['name'],serialize($user));
+</code></pre>
+<p>and to load the <em>record</em> for the user</p>
+<pre><code>function &amp;get_user($name){
+    return unserialize(file_get_contents(&quot;../userdata/&quot;.$name));
+}
+</code></pre>
+<p>but again this implementation will vary on the application and nature of the database you need.</p>
+"
+155,108,,"<p>I used to have lots of Explorer crashes (on 32-bit) caused by Tortoise. They seem to have gone away since I used the Include/Exclude path settings in the ""Icon Overlays"" configuration of TSVN. Constraining icon overlays to specific directories where I keep my source made this much more stable.</p>
+"
+158,146,,"<p>Use your httpd log files. Install <a href=""http://awstats.sourceforge.net/"" rel=""noreferrer"">http://awstats.sourceforge.net/</a></p>
+"
+159,104,,"<p>Strictly speaking, a memory leak is consuming memory that is ""no longer used"" by the program.</p>
+
+<p>""No longer used"" has more than one meaning, it could mean ""no more reference to it"", that is, totally unrecoverable, or it could mean, referenced, recoverable, unused but the program keeps the references anyway. Only the later applies to .Net for <strong>perfectly managed objects</strong>. However, not all classes are perfect and at some point an underlying unmanaged implementation could leak resources permanently for that process.</p>
+
+<p>In all cases, the application consumes more memory than strictly needed. The sides effects, depending on the ammount leaked, could go from none, to slowdown caused by excessive collection, to a series of memory exceptions and finally a fatal error followed by forced process termination.</p>
+
+<p>You know an application has a memory problem when monitoring shows that more and more memory is allocated to your process <strong>after each garbage collection cycle</strong>. In such case, you are either keeping too much in memory, or some underlying unmanaged implementation is leaking.</p>
+
+<p>For most leaks, resources are recovered when the process is terminated, however some resources are not always recovered in some precise cases, GDI cursor handles are notorious for that. Of course, if you have an interprocess communication mechanism, memory allocated in the other process would not be freed until that process frees it or terminates.</p>
+"
+160,129,,"<p>The best way that I have found is the <a href=""http://www.mysql.com/products/tools/migration-toolkit/"" rel=""noreferrer"">MySQL Migration Toolkit</a> provided by MySQL.  I have used it successfully for some large migration projects.</p>
+"
