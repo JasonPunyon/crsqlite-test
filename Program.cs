@@ -11,6 +11,9 @@ DeleteAtDest();
 ConcurrentUpdate();
 CreateAfterDelete();
 
+Thread.Sleep(100);
+Directory.GetFiles(".", "*.db*").ToList().ForEach(o => File.Delete(o));
+
 void Creation() => Test("Create",
                         WithDatabase(out var db1), WithDatabase(out var db2),
                         Create(db1, 1, "One", "One"),
@@ -131,7 +134,8 @@ void Test(string name, params TestElement[] elements)
 
 TestElement WithDatabase(out SqliteConnection conn)
 {
-    conn = new SqliteConnection($"Data Source={Guid.NewGuid()}.db");
+    //conn = new SqliteConnection($"Data Source={Guid.NewGuid()}.db");
+    conn = new SqliteConnection($"Data Source=");
     conn.Execute("PRAGMA journal_mode=wal");
     conn.LoadExtension("crsqlite");
     conn.Execute("CREATE TABLE Posts(Id INTEGER PRIMARY KEY, ParentId INTEGER, Body TEXT, Title TEXT);");
@@ -168,7 +172,7 @@ record DatabaseElement(SqliteConnection conn) : TestElement;
 record UpdateElement(SqliteConnection conn, int Id, string Body, string Title) : TestElement;
 record DeleteElement(SqliteConnection conn, int Id) : TestElement;
 
-public record CrSqlChange(string table, string pk, string cid, string val, string col_version, string db_version, byte[] site_id)
+public record CrSqlChange(string table, byte[] pk, string cid, string val, string col_version, string db_version, byte[] site_id)
 {
     //For Dapper <3
     private CrSqlChange() : this(default!, default!, default!, default!, default!, default!, default!) { }
